@@ -17,7 +17,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
+import org.camunda.bpm.engine.BadUserRequestException;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.identity.Group;
@@ -80,6 +82,25 @@ public class IdentityServiceTenantTest {
     assertThat(tenant, is(notNullValue()));
     assertThat(tenant.getId(), is(TENANT_ONE));
     assertThat(tenant.getName(), is("Tenant"));
+  }
+
+  @Test
+  public void createExistingTenant() {
+    Tenant tenant = identityService.newTenant(TENANT_ONE);
+    tenant.setName("Tenant");
+    identityService.saveTenant(tenant);
+
+    Tenant secondTenant = identityService.newTenant(TENANT_ONE);
+    secondTenant.setName("Tenant");
+    try {
+      identityService.saveTenant(secondTenant);
+      fail("BadUserRequestException is expected");
+    } catch (Exception ex) {
+      if (!(ex instanceof BadUserRequestException)) {
+        fail("BadUserRequestException is expected, but another exception was received:  " + ex);
+      }
+      assertEquals("The tenant already exists", ex.getMessage());
+    }
   }
 
   @Test
