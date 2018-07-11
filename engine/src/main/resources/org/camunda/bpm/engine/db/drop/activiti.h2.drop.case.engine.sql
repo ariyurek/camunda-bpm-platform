@@ -2,6 +2,9 @@ drop index ACT_IDX_CASE_EXEC_BUSKEY;
 drop index ACT_IDX_CASE_DEF_TENANT_ID;
 drop index ACT_IDX_CASE_EXEC_TENANT_ID;
 
+-- https://app.camunda.com/jira/browse/CAM-9165
+drop index ACT_IDX_CASE_EXE_CASE_INST;
+
 alter table ACT_RU_CASE_EXECUTION
     drop constraint ACT_FK_CASE_EXE_CASE_INST;
 

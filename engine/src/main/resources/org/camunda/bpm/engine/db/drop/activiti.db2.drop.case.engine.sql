@@ -1,5 +1,8 @@
 drop index ACT_IDX_CASE_EXEC_BUSKEY;
 
+-- https://app.camunda.com/jira/browse/CAM-9165
+drop index ACT_IDX_CASE_EXE_CASE_INST;
+
 alter table ACT_RU_CASE_EXECUTION
     drop foreign key ACT_FK_CASE_EXE_CASE_INST;
 
